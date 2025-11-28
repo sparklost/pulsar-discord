@@ -1,7 +1,7 @@
 <p align="center">
   <b>Pulsar-Discord</b><br>
   <a href="https://web.pulsar-edit.dev/packages/pulsar-discord">Pulsar</a> |
-  <a href="https://github.com/mzivic7/pulsar-discord/blob/main/FAQ.md">FAQ</a>
+  <a href="https://github.com/sparklost/pulsar-discord/blob/main/FAQ.md">FAQ</a>
   <br><br>
 </p>
 
@@ -19,7 +19,7 @@ To install pulsar-discord you will need to download the [latest](https://git-scm
 Then open terminal and navigate to an empty folder, then enter the following into the terminal:
 
 ```
-git clone https://github.com/mzivic7/pulsar-discord.git
+git clone https://github.com/sparklost/pulsar-discord.git
 cd pulsar-discord
 npm i
 pulsar -p link
@@ -31,7 +31,7 @@ Then **add pulsar to discord game list** and restart pulsar to see the effects.
 
 # FAQ
 
-[Please go here to see troubleshooting and questions](https://github.com/mzivic7/pulsar-discord/blob/main/FAQ.md)
+[Please go here to see troubleshooting and questions](https://github.com/sparklost/pulsar-discord/blob/main/FAQ.md)
 
 ---
 
@@ -42,7 +42,7 @@ Released under the [MIT](https://en.wikipedia.org/wiki/MIT_License) License.
 >MIT License
 >
 >Copyright (c) 2018 HelloWorld017  
->Copyright (c) 2024 mzivic7
+>Copyright (c) 2024 sparklost
 >
 >Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,5 +1,5 @@
 <p align="center">
-  <b><a href="https://github.com/mzivic7/pulsar-discord">Pulsar-Discord</a></b> / <a href="https://github.com/mzivic7/pulsar-discord/blob/main/faq.md">FAQ</a>
+  <b><a href="https://github.com/sparklost/pulsar-discord">Pulsar-Discord</a></b> / <a href="https://github.com/sparklost/pulsar-discord/blob/main/faq.md">FAQ</a>
 </p>
 
 ---
@@ -51,7 +51,7 @@ Now, under same assets, upload the custom image that will replace original Pulsa
 
 Open the terminal and type the following: `pulsar -p uninstall pulsar-discord`
 
-Then, [reinstall pulsar-discord from the source code](https://github.com/mzivic7/pulsar-discord#installing-from-source-code) and restart Pulsar and discord.
+Then, [reinstall pulsar-discord from the source code](https://github.com/sparklost/pulsar-discord#installing-from-source-code) and restart Pulsar and discord.
 
 ---
 
