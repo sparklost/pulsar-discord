@@ -13,8 +13,6 @@ npm i
 pulsar -p link
 ```
 
-Then **add pulsar to discord game list** and restart pulsar to see the effects.
-
 ---
 
 # FAQ
@@ -50,7 +48,7 @@ Then, [reinstall pulsar-discord from the source code](https://github.com/sparklo
 ## Getting debug info
 - Turn on Debug Mode option in package settings
 - Restart Pulsar
-- Open file `(UserDirectory)/.pulsar/pulsar-discord/Log.txt
+- Open file `(UserDirectory)/.pulsar/pulsar-discord/Log.txt`
 
 ---
 

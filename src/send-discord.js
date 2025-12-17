@@ -137,7 +137,6 @@ class DiscordSender {
 		this.pauseRequested = false;
 		this.paused = false;
 
-		this.connecting = false;
         this.retryTimeout = null;
 	}
 
@@ -150,7 +149,7 @@ class DiscordSender {
 		this.onlineRenderers[id] = true;
 
 		if(sendAfter){
-			logging.log(`New editor confirmed, sending activities.`);
+			logging.log(`New editor confirmed.`);
 			this.sendActivity();
 		}
 	}
@@ -163,15 +162,14 @@ class DiscordSender {
 		this.onlineRenderers[id] = false;
 
 		if(!this.isRendererOnline) {
-			logging.log(`No editor remained, destroying rpc clients.`);
+			logging.log(`No editors remaining.`);
 			this.destroyRpc();
 		}
 	}
 
 	async setupRpc() {
-		if (this.rpc || this.connecting) return;
+		if (this.rpc) return;
 
-		this.connecting = true;
 		const clientId = config.behaviour.customAppId;
 
 		logging.log("Initializing RPC.");
@@ -183,7 +181,6 @@ class DiscordSender {
 				logging.log("Logged in successfully.");
 				this.rpc = rpc;
 				this.destroied = false;
-				this.connecting = false;
 			});
 
 			const onDisconnect = () => {
@@ -199,13 +196,12 @@ class DiscordSender {
 
 		} catch {
 			logging.log("Could not connect to RPC.");
-			this.connecting = false;
 			this.scheduleReconnect();
 		}
 	}
 
 	scheduleReconnect() {
-		if (this.retryTimeout || !this.isRendererOnline) return;
+		if (this.retryTimeout) return;
 
 		logging.log("Retrying in 10s.");
 
@@ -491,7 +487,6 @@ ipcMain.on('pulsar-discord.initialize', event => {
 		config.updateConfig(configObject);
 		sender.fillValues();
 		sender.setupRpc();
-		sender.scheduleReconnect();
 		sender.loop();
 	});
 });
