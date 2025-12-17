@@ -2,7 +2,7 @@ const fs = require('fs');
 const {ipcMain, webContents} = require('electron');
 const path = require('path');
 const util = require('util');
-const {Client} = require('../dist/rpc.bundle.js');
+const RPC = require("discord-rpc");
 const matched = require('../data/matched.json');
 
 if (!String.prototype.padStart) {
@@ -136,6 +136,9 @@ class DiscordSender {
 		this.destroied = false;
 		this.pauseRequested = false;
 		this.paused = false;
+
+		this.connecting = false;
+        this.retryTimeout = null;
 	}
 
 	setOnline(id) {
@@ -147,7 +150,7 @@ class DiscordSender {
 		this.onlineRenderers[id] = true;
 
 		if(sendAfter){
-			logging.log(`New editor confirmed, sending activities...`);
+			logging.log(`New editor confirmed, sending activities.`);
 			this.sendActivity();
 		}
 	}
@@ -160,69 +163,72 @@ class DiscordSender {
 		this.onlineRenderers[id] = false;
 
 		if(!this.isRendererOnline) {
-			logging.log(`No editor remained, destroying rpc clients...`);
+			logging.log(`No editor remained, destroying rpc clients.`);
 			this.destroyRpc();
 		}
 	}
 
-	setupRpc() {
-		if(this.rpc) return new Promise(resolve => resolve());
+	async setupRpc() {
+		if (this.rpc || this.connecting) return;
+
+		this.connecting = true;
 		const clientId = config.behaviour.customAppId;
 
-		return new Promise((resolve, reject) => {
-			logging.log("Initializing RPC...");
+		logging.log("Initializing RPC.");
 
-			if(typeof Client === 'undefined') return reject("No client available!");
+		try {
+			const rpc = new RPC.Client({ transport: "ipc" });
 
-			const rpc = new Client({ transport: 'ipc' });
-
-			let previousPath = process.env.XDG_RUNTIME_DIR;
-			if(config.troubleShooting.ubuntuPatch) {
-				const { env: { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } } = process;
-				let prefix = XDG_RUNTIME_DIR || TMPDIR || TMP || TEMP || '/tmp';
-
-				prefix = prefix.replace(/\/$/, '') + '/snap.discord';
-
-				process.env.XDG_RUNTIME_DIR = prefix;
-
-				logging.log("Experimental Ubuntu Snap Patch Enabled.");
-				logging.log(`Redirected XDG_RUNTIME_DIR into ${prefix}`);
-			}
-
-			rpc.on('ready', () => {
+			rpc.on("ready", () => {
+				logging.log("Logged in successfully.");
 				this.rpc = rpc;
 				this.destroied = false;
-
-				if(config.troubleShooting.ubuntuPatch) {
-					process.env.XDG_RUNTIME_DIR = previousPath;
-
-					if(previousPath === undefined) delete process.env.XDG_RUNTIME_DIR;
-				}
-
-				logging.log("Logged in successfully.");
-				resolve();
+				this.connecting = false;
 			});
 
-			logging.log(`Logging in RPC with ID ${clientId}`);
+			const onDisconnect = () => {
+				logging.log("Discord RPC disconnected.");
+				this.scheduleReconnect();
+			};
 
-			rpc.login({
-				clientId
-			}).catch(reject);
-		});
+			rpc.on("close", onDisconnect);
+			rpc.on("error", onDisconnect);
+			rpc.on("disconnected", onDisconnect);
+
+			await rpc.login({ clientId });
+
+		} catch {
+			logging.log("Could not connect to RPC.");
+			this.connecting = false;
+			this.scheduleReconnect();
+		}
+	}
+
+	scheduleReconnect() {
+		if (this.retryTimeout || !this.isRendererOnline) return;
+
+		logging.log("Retrying in 10s.");
+
+		this.destroyRpc();
+
+		this.retryTimeout = setTimeout(() => {
+			this.retryTimeout = null;
+			this.setupRpc();
+		}, 10000);
 	}
 
 	async destroyRpc() {
-		if(this.destroied) return;
-		if(this.rpc === null) return;
+		if (this.destroied || !this.rpc) return;
 
-		logging.log("Destroying RPC Client...");
+		logging.log("Destroying RPC Client.");
 		this.destroied = true;
+
+		this.rpc.removeAllListeners();
 
 		const _rpc = this.rpc;
 		this.rpc = null;
 
 		await _rpc.destroy();
-		logging.log("Done destroying RPC Client. It is now safe to turn off the computer.")
 	}
 
 	fillValues() {
@@ -321,13 +327,9 @@ class DiscordSender {
 			packet.smallImageText = this.getTextValue(config.rest.smallImageText, config.rest.smallImageTextCustom);
 		}
 
-		try {
-			this.rpc.setActivity(normalize(packet)).catch(err => {
-				this.handleActivityError(err, packet);
-			});
-		} catch(err) {
-			this.handleActivityError(err, packet);
-		}
+		logging.log("Set Activity: " + util.inspect(packet))
+		if (!this.rpc) return;
+		this.rpc.setActivity(normalize(packet));
 	}
 
 	handleActivityError(err, packet) {
@@ -429,23 +431,17 @@ class DiscordSender {
 	}
 
 	async loop() {
-		try {
-			if(this.isRendererOnline && this.destroied) await this.setupRpc(Client)
-		} catch(e) {
-			logging.log(e.stack);
-
-			const focusedContents = webContents.getFocusedWebContents();
-			if(focusedContents) {
-				focusedContents.send('pulsar-discord.noDiscord');
-			}
-			
-			setTimeout(() => this.loop(), 10000);
-			return;
+		// If editor is offline, ensure RPC is torn down
+		if (!this.isRendererOnline && this.rpc) {
+			this.destroyRpc();
 		}
 
-		if(this.isRendererOnline) this.sendActivity();
+		// Send activity only when connected
+		if (this.isRendererOnline && this.rpc) {
+			this.sendActivity();
+		}
 
-		if(!this.pauseRequested) {
+		if (!this.pauseRequested) {
 			setTimeout(this.loopFunction, config.behaviour.updateTick);
 		} else {
 			this.paused = true;
@@ -494,11 +490,9 @@ ipcMain.on('pulsar-discord.initialize', event => {
 	event.sender.executeJavaScript("atom.config.get('pulsar-discord')").then(configObject => {
 		config.updateConfig(configObject);
 		sender.fillValues();
-		sender.setupRpc().then((v) => {
-			sender.loop();
-		}).catch(err => {
-			logging.log(util.inspect(err));
-		});
+		sender.setupRpc();
+		sender.scheduleReconnect();
+		sender.loop();
 	});
 });
 
