@@ -1,6 +1,8 @@
-# Installation
+# Pulsar-Discord
 
-## Installing from Pulsar Package Manager
+## Installation
+
+### Installing from Pulsar Package Manager
 Either download the package via the built in package manager (Pulsar Settings > Install > pulsar-discord) or run `pulsar -p install pulsar-discord` in your terminal of choice.
 
 ## Installing from Source Code
@@ -9,15 +11,13 @@ Then open terminal and navigate to an empty folder, then enter the following int
 ```
 git clone https://github.com/sparklost/pulsar-discord.git
 cd pulsar-discord
-npm i
+pulsar -p install
 pulsar -p link
 ```
 
----
+## FAQ
 
-# FAQ
-
-## Changeable Text
+### Changeable Text
 To change other texts like 'Editing a (name) file', follow this steps:
 1. **Open i18n file**
 Open file located in `(UserDirectory)/.pulsar/packages/pulsar-discord/i18n/(Currently Using Language).json`
@@ -31,13 +31,13 @@ Click [Here](https://discordapp.com/developers/applications/) and create a new a
 Your app name will later be displayed as `Playing <app-name>`.
 3. **Set Client ID to your application**
 Copy your `Application ID`.  
-And in pulsar-discord package settings change `Settings > Behaviour > Custom Client ID` into your Application ID.  
+And in pulsar-discord package settings change `Settings > Behavior > Custom Client ID` into your Application ID.  
 4. **Upload icons assets**
 Download all of the programming languages icons ([available here](https://github.com/HelloWorld017/fileicons-render/tree/main/icons)) and upload them all under Rich Presence > Rich Presence Assets (if you miss one it won't work!). The asset name should be filename of the image (without the `.png`!).
 5. **Upload custom image assets**
-Now, under same assets, upload the custom image that will replace original Pulsar icon. Imust have asset name `pulsar`.
+Now, under same assets, upload the custom image that will replace original Pulsar icon. It must have asset name `pulsar`.
 
-## Rich Presence is not showing
+### Rich Presence is not showing
 - Check if the Pulsar is added in the games tab.
 - Check if the option `Display currently running game as a status message.` is turned on in Discord.
 - Restart the Pulsar and Discord.
@@ -45,14 +45,13 @@ Now, under same assets, upload the custom image that will replace original Pulsa
 Open the terminal and type the following: `pulsar -p uninstall pulsar-discord`  
 Then, [reinstall pulsar-discord from the source code](https://github.com/sparklost/pulsar-discord#installing-from-source-code) and restart Pulsar and discord.  
 
-## Getting debug info
+### Getting debug info
 - Turn on Debug Mode option in package settings
 - Restart Pulsar
-- Open file `(UserDirectory)/.pulsar/pulsar-discord/Log.txt`
+- Open file `(UserDirectory)/.pulsar/pulsar-discord-log.txt`
 
----
 
-# License
+## License
 
 Released under the [MIT](https://en.wikipedia.org/wiki/MIT_License) License.
 
