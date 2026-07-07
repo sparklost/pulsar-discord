@@ -1,7 +1,7 @@
 {
   "name": "pulsar-discord",
   "main": "./lib/main.js",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "description": "Integrate Pulsar with Discord and show Rich Presence information",
   "repository": "https://github.com/sparklost/pulsar-discord",
   "license": "MIT",
