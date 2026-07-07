@@ -63,6 +63,8 @@
 	"config-behaviour-defaultProjectName": "Default Project Name",
 	"config-behaviour-defaultProjectName-desc": "If some custom text uses %projectName% but there's no project, %projectName% will be substituted with this.",
 	"config-behaviour-defaultProjectName-default": "a project",
+	"config-behaviour-projectOverrides": "Project Name Overrides",
+	"config-behaviour-projectOverrides-desc": "A JSON string mapping absolute paths to custom names (e.g., {\"/path/to/project\": \"My Custom Name\", \"/hidden/project\": null}). Set to null to disable rich presence for that directory.",
 
 
 	"config-smallImage": "Small Image",
@@ -141,8 +143,6 @@
 
 	"config-troubleshooting": "Trouble Shooting",
 	"config-troubleshooting-desc": "Options to handle discord integration troubles",
-	"config-troubleshooting-ubuntuPatch": "Patch Ubuntu 18.04 Bug",
-	"config-troubleshooting-ubuntuPatch-desc": "Patch Discord Rich Presence not showing on Ubuntu 18.04. Tick this when you installed discord from Ubuntu Software",
 	"config-troubleshooting-debugLog": "Debug Mode",
 	"config-troubleshooting-debugLog-desc": "Log debugging messages in pulsar-discord directory",
 	"config-troubleshooting-noDiscordNotification": "No Discord Notification",

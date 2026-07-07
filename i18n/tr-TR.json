@@ -141,8 +141,6 @@
 
 	"config-troubleshooting": "Sorun Giderme",
 	"config-troubleshooting-desc": "Discord entegrasyon sorunlarını giderecek seçenekler.",
-	"config-troubleshooting-ubuntuPatch": "Ubuntu 18.04 Bugu Yaması",
-	"config-troubleshooting-ubuntuPatch-desc": "Ubuntu 18.04'de Discord Rich Presence görünmeme sorunu için yama. Discord'u Ubuntu Software'den yüklediysen bunu işaretle.",
 	"config-troubleshooting-debugLog": "Hata Ayıklama Modu",
 	"config-troubleshooting-debugLog-desc": "Hata ayıklama mesajlarını pulsar-discord klasörüne kaydet.",
 	"config-troubleshooting-noDiscordNotification": "Discord bildirimi yok",

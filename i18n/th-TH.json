@@ -100,8 +100,6 @@
 	"config-rest-fileNameCustom-desc": "ตั้งค่านี้เป็นข้อความที่กำหนดเองหากคุณเลือก 'กำหนดเอง' ในชื่อไฟล์ (รองรับ %projectName%)",
 	"config-troubleshooting": "การแก้ไขปัญหา",
 	"config-troubleshooting-desc": "ตัวเลือกเพื่อที่จะจัดการกับปัญหา",
-	"config-troubleshooting-ubuntuPatch": "บัคแพตช์ Ubuntu 18.04",
-	"config-troubleshooting-ubuntuPatch-desc": "แพตช์ Discord Rich Presence ไม่แสดงบน Ubuntu 18.04 ทำเครื่องหมายที่นี่ เมื่อคุณติดตั้ง Discord จากซอฟต์แวร์ Ubuntu",
 	"config-troubleshooting-debugLog": "โหมดแก้ไขข้อบกพร่อง",
 	"config-troubleshooting-debugLog-desc": "บันทึกข้อความการดีบักในไดเรกทอรี pulsar-discord",
 	"config-troubleshooting-noDiscordNotification": "ไม่มีการแจ้งเตือน Discord",
